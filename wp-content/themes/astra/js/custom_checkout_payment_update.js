@@ -1,5 +1,5 @@
 console.log('file is working...');
-jQuery(window).on('load', function($) {
+jQuery(document).ready(function($) {
     jQuery(function($) {
         jQuery('form.checkout').on('change', 'input[name="payment_method"]', function() {
             jQuery('body').trigger('update_checkout');

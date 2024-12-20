@@ -190,7 +190,6 @@ add_filter( 'gettext', function( $text ) {
 } );
 
 
-
 // Working by EXplore Logics
 function enqueue_custom_scripts() {
 	wp_enqueue_script('jquery');
@@ -229,7 +228,7 @@ function calculate_distance_based_fee($cart) {
 		}
 
 		$chosen_payment_method = WC()->session->get('chosen_payment_method');
-		if (in_array($chosen_payment_method, array('stripe', 'paypal', 'ppcp-gateway'))) {
+		if (in_array($chosen_payment_method, array('stripe', 'paypal', 'zelle'))) {
 			$cart_total = $cart->get_subtotal() + $area_fee;
 			$service_fee = $cart_total * 0.04;
 			WC()->cart->add_fee(__('Card Payment Charges', 'Astra'), $service_fee);
@@ -291,3 +290,4 @@ function update_travel_fee() {
 	$selected_area2 = WC()->session->get('billing_area_dropdown');
 	wp_send_json_success(['message' => 'Travel fee updated.', 'selected_area' => $selected_area2]);
 }
+
