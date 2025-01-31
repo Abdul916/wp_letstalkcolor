@@ -192,85 +192,85 @@ add_filter( 'gettext', function( $text ) {
 
 
 // Working by EXplore Logics
-function enqueue_custom_scripts() {
-	wp_enqueue_script('jquery');
-	wp_enqueue_script('custom_checkout_payment_update', get_template_directory_uri() . '/js/custom_checkout_payment_update.js', array('jquery'), null, true);
-}
-add_action('wp_enqueue_scripts', 'enqueue_custom_scripts');
+// function enqueue_custom_scripts() {
+// 	wp_enqueue_script('jquery');
+// 	wp_enqueue_script('custom_checkout_payment_update', get_template_directory_uri() . '/js/custom_checkout_payment_update.js', array('jquery'), null, true);
+// }
+// add_action('wp_enqueue_scripts', 'enqueue_custom_scripts');
 
-add_action('woocommerce_cart_calculate_fees', 'calculate_distance_based_fee');
-function calculate_distance_based_fee($cart) {
-	if (is_checkout()) {
-		$area_fee = 0;
-		$selected_area = WC()->session->get('billing_area_dropdown');
-		if ($selected_area) {
-			$areas_with_fee = array(
-				'Manor-78653',
-				'Hutto-78634',
-				'Salado-76571',
-				'Dripping-Springs-78620',
-				'Spicewood-78669',
-				'Sweetwater-78669',
-				'Circle-C-78749-78739',
-				'Far-South-Austin-78747',
-				'Burnett-78611',
-			);
-			if (in_array($selected_area, $areas_with_fee, true)) {
-				$area_fee = 65;
-				$link = '<a href="' . get_permalink(get_page_by_title('Travel Package')) . '" target="_blank">Travel Package</a>';
-				add_filter('woocommerce_cart_totals_fee_html', function($html, $fee) use ($link) {
-					if ($fee->name === 'Travel Fee') {
-						$html = '$65 ' . $link;
-					}
-					return $html;
-				}, 10, 2);
-				WC()->cart->add_fee('Travel Fee', $area_fee);
-			}
-		}
+// add_action('woocommerce_cart_calculate_fees', 'calculate_distance_based_fee');
+// function calculate_distance_based_fee($cart) {
+// 	if (is_checkout()) {
+// 		$area_fee = 0;
+// 		$selected_area = WC()->session->get('billing_area_dropdown');
+// 		if ($selected_area) {
+// 			$areas_with_fee = array(
+// 				'Manor-78653',
+// 				'Hutto-78634',
+// 				'Salado-76571',
+// 				'Dripping-Springs-78620',
+// 				'Spicewood-78669',
+// 				'Sweetwater-78669',
+// 				'Circle-C-78749-78739',
+// 				'Far-South-Austin-78747',
+// 				'Burnett-78611',
+// 			);
+// 			if (in_array($selected_area, $areas_with_fee, true)) {
+// 				$area_fee = 65;
+// 				$link = '<a href="' . get_permalink(get_page_by_title('Travel Package')) . '" target="_blank">Travel Package</a>';
+// 				add_filter('woocommerce_cart_totals_fee_html', function($html, $fee) use ($link) {
+// 					if ($fee->name === 'Travel Fee') {
+// 						$html = '$65 ' . $link;
+// 					}
+// 					return $html;
+// 				}, 10, 2);
+// 				WC()->cart->add_fee('Travel Fee', $area_fee);
+// 			}
+// 		}
 
-		$chosen_payment_method = WC()->session->get('chosen_payment_method');
-		if (in_array($chosen_payment_method, array('stripe', 'paypal', 'ppcp-gateway'))) {
-			$cart_total = $cart->get_subtotal() + $area_fee;
-			$service_fee = $cart_total * 0.04;
-			WC()->cart->add_fee(__('Card Payment Charges', 'Astra'), $service_fee);
-		}
-	} else {
-	}
-}
+// 		$chosen_payment_method = WC()->session->get('chosen_payment_method');
+// 		if (in_array($chosen_payment_method, array('stripe', 'paypal', 'ppcp-gateway'))) {
+// 			$cart_total = $cart->get_subtotal() + $area_fee;
+// 			$service_fee = $cart_total * 0.04;
+// 			WC()->cart->add_fee(__('Card Payment Charges', 'Astra'), $service_fee);
+// 		}
+// 	} else {
+// 	}
+// }
 
-add_filter('woocommerce_checkout_fields', 'add_area_dropdown_to_checkout');
-function add_area_dropdown_to_checkout($fields) {
-	$last_selected_value = WC()->session->get('billing_area_dropdown', '000');
-	$fields['billing']['billing_area_dropdown'] = array(
-		'type'        => 'select',
-		'label'       => __('Select Area', 'Astra'),
-		'required'    => true,
-		'options'     => array(
-			'000'        => __('Select an option', 'Astra'),
-			'Manor-78653' => __('Manor - 78653', 'Astra'),
-			'Hutto-78634' => __('Hutto – 78634', 'Astra'),
-			'Salado-76571' => __('Salado – 76571', 'Astra'),
-			'Dripping-Springs-78620' => __('Dripping Springs - 78620', 'Astra'),
-			'Spicewood-78669' => __('Spicewood - 78669', 'Astra'),
-			'Sweetwater-78669' => __('Sweetwater - 78669', 'Astra'),
-			'Circle-C-78749-78739' => __('Circle C – 78749, 78739', 'Astra'),
-			'Far-South-Austin-78747' => __('Far South Austin – 78747', 'Astra'),
-			'Burnett-78611' => __('Burnett - 78611', 'Astra'),
-			'Not-applicable' => __('Not applicable', 'Astra'),
-		),
-		'default' => $last_selected_value,
-	);
-	return $fields;
-}
+// add_filter('woocommerce_checkout_fields', 'add_area_dropdown_to_checkout');
+// function add_area_dropdown_to_checkout($fields) {
+// 	$last_selected_value = WC()->session->get('billing_area_dropdown', '000');
+// 	$fields['billing']['billing_area_dropdown'] = array(
+// 		'type'        => 'select',
+// 		'label'       => __('Select Area', 'Astra'),
+// 		'required'    => true,
+// 		'options'     => array(
+// 			'000'        => __('Select an option', 'Astra'),
+// 			'Manor-78653' => __('Manor - 78653', 'Astra'),
+// 			'Hutto-78634' => __('Hutto – 78634', 'Astra'),
+// 			'Salado-76571' => __('Salado – 76571', 'Astra'),
+// 			'Dripping-Springs-78620' => __('Dripping Springs - 78620', 'Astra'),
+// 			'Spicewood-78669' => __('Spicewood - 78669', 'Astra'),
+// 			'Sweetwater-78669' => __('Sweetwater - 78669', 'Astra'),
+// 			'Circle-C-78749-78739' => __('Circle C – 78749, 78739', 'Astra'),
+// 			'Far-South-Austin-78747' => __('Far South Austin – 78747', 'Astra'),
+// 			'Burnett-78611' => __('Burnett - 78611', 'Astra'),
+// 			'Not-applicable' => __('Not applicable', 'Astra'),
+// 		),
+// 		'default' => $last_selected_value,
+// 	);
+// 	return $fields;
+// }
 
-add_action('woocommerce_checkout_update_order_meta', 'save_area_dropdown_to_order_meta');
-function save_area_dropdown_to_order_meta($order_id) {
-	if (!empty($_POST['billing_area_dropdown'])) {
-		$selected_value = sanitize_text_field($_POST['billing_area_dropdown']);
-		WC()->session->set('billing_area_dropdown', $selected_value);
-		update_post_meta($order_id, '_billing_area_dropdown', sanitize_text_field($_POST['billing_area_dropdown']));
-	}
-}
+// add_action('woocommerce_checkout_update_order_meta', 'save_area_dropdown_to_order_meta');
+// function save_area_dropdown_to_order_meta($order_id) {
+// 	if (!empty($_POST['billing_area_dropdown'])) {
+// 		$selected_value = sanitize_text_field($_POST['billing_area_dropdown']);
+// 		WC()->session->set('billing_area_dropdown', $selected_value);
+// 		update_post_meta($order_id, '_billing_area_dropdown', sanitize_text_field($_POST['billing_area_dropdown']));
+// 	}
+// }
 
 // add_action('woocommerce_admin_order_data_after_billing_address', 'display_area_dropdown_in_admin', 10, 1);
 // function display_area_dropdown_in_admin($order) {
@@ -280,14 +280,146 @@ function save_area_dropdown_to_order_meta($order_id) {
 // 	}
 // }
 
-add_action('wp_ajax_update_travel_fee', 'update_travel_fee');
-add_action('wp_ajax_nopriv_update_travel_fee', 'update_travel_fee');
-function update_travel_fee() {
-	if (!isset($_POST['selected_area'])) {
-		wp_send_json_error(['message' => 'No area selected.']);
+// add_action('wp_ajax_update_travel_fee', 'update_travel_fee');
+// add_action('wp_ajax_nopriv_update_travel_fee', 'update_travel_fee');
+// function update_travel_fee() {
+// 	if (!isset($_POST['selected_area'])) {
+// 		wp_send_json_error(['message' => 'No area selected.']);
+// 	}
+// 	$selected_area = sanitize_text_field($_POST['selected_area']);
+// 	WC()->session->set('billing_area_dropdown', $selected_area);
+// 	$selected_area2 = WC()->session->get('billing_area_dropdown');
+// 	wp_send_json_success(['message' => 'Travel fee updated.', 'selected_area' => $selected_area2]);
+// }
+
+
+// New Working of https://italoexpresship.it/pagamento/
+
+// add_action('woocommerce_checkout_fields', 'add_custom_pickup_fields');
+
+// function add_custom_pickup_fields($fields) {
+//     // Pickup Option Dropdown
+//     $fields['billing']['pickup_option'] = array(
+//         'type'     => 'select',
+//         'label'    => __('Select Pickup Option', 'woocommerce'),
+//         'required' => true,
+//         'class'    => array('form-row-wide'),
+//         'options'  => array(
+//             ''              => __('Select an option', 'woocommerce'),
+//             'deliver_home'  => __('Deliver Home', 'woocommerce'),
+//             'deliver_ups'   => __('Deliver UPS Points', 'woocommerce'),
+//         ),
+//     );
+
+//     // UPS Points Dropdown (Initially Hidden)
+//     $fields['billing']['ups_points'] = array(
+//         'type'     => 'select',
+//         'label'    => __('Select UPS Point', 'woocommerce'),
+//         'required' => false, // Not required initially
+//         'class'    => array('form-row-wide', 'ups-points-field'),
+//         'options'  => array(
+//             ''           => __('Select UPS Point', 'woocommerce'),
+//             'point_1'    => __('UPS Point 1', 'woocommerce'),
+//             'point_2'    => __('UPS Point 2', 'woocommerce'),
+//             'point_3'    => __('UPS Point 3', 'woocommerce'),
+//         ),
+//     );
+
+//     return $fields;
+// }
+
+
+add_action('woocommerce_before_checkout_billing_form', 'custom_pickup_fields');
+function custom_pickup_fields($checkout) { ?>
+	<div id="custom_pickup_fields">
+		<p class="form-row validate-required" id="billing_pickup_time_field">
+			<label for="billing_pickup_time" class="">Pickup Time&nbsp;<abbr class="required" title="required">*</abbr></label>
+			<span class="woocommerce-input-wrapper">
+				<select name="billing_pickup_time" id="billing_pickup_time" class="pickup-option-class form-row-wide" data-allow_clear="true" data-placeholder="Select an option">
+					<option value="9:00 AM - 12:00 PM">9:00 AM - 12:00 PM</option>
+					<option value="12:00 PM - 3:00 PM">12:00 PM - 3:00 PM</option>
+					<option value="3:00 PM - 6:00 PM">3:00 PM - 6:00 PM</option>
+				</select>
+			</span>
+		</p>
+
+		<p class="form-row validate-required" id="billing_pickup_option_field">
+			<label for="billing_pickup_option" class="">Pickup Option&nbsp;<abbr class="required" title="required">*</abbr></label>
+			<span class="woocommerce-input-wrapper">
+				<select name="billing_pickup_option" id="billing_pickup_option" class="pickup-option-class form-row-wide" data-allow_clear="true" data-placeholder="Select an option" required>
+					<option value="">Select an option</option>
+					<option value="deliver_home">Deliver Home</option>
+					<option value="deliver_ups_point">Deliver UPS Points</option>
+				</select>
+			</span>
+		</p>
+
+		<p class="form-row validate-required" id="billing_ups_pickup_point_field" style="display: none;">
+			<label for="billing_ups_pickup_point" class="">Select UPS Point&nbsp;<abbr class="required" title="required">*</abbr></label>
+			<span class="woocommerce-input-wrapper">
+				<select name="billing_ups_pickup_point" id="billing_ups_pickup_point" class="ups-points-class form-row-wide" data-allow_clear="true" data-placeholder="Select an option">
+					<option value="">Select UPS Point</option>
+					<option value="UPS Point 1">UPS Point 1</option>
+					<option value="UPS Point 2">UPS Point 2</option>
+					<option value="UPS Point 3">UPS Point 3</option>
+				</select>
+			</span>
+		</p>
+
+
+	</div>
+<?php }
+
+add_action('woocommerce_checkout_update_order_meta', 'save_pickup_fields');
+function save_pickup_fields($order_id) {
+	if (!empty($_POST['billing_pickup_time'])) {
+		update_post_meta($order_id, 'billing_pickup_time', sanitize_text_field($_POST['billing_pickup_time']));
 	}
-	$selected_area = sanitize_text_field($_POST['selected_area']);
-	WC()->session->set('billing_area_dropdown', $selected_area);
-	$selected_area2 = WC()->session->get('billing_area_dropdown');
-	wp_send_json_success(['message' => 'Travel fee updated.', 'selected_area' => $selected_area2]);
+	if (!empty($_POST['billing_pickup_option'])) {
+		update_post_meta($order_id, 'billing_pickup_option', sanitize_text_field($_POST['billing_pickup_option']));
+	}
+	if (!empty($_POST['billing_ups_pickup_point'])) {
+		update_post_meta($order_id, 'billing_ups_pickup_point', sanitize_text_field($_POST['billing_ups_pickup_point']));
+	}
 }
+add_action('woocommerce_admin_order_data_after_billing_address', 'display_pickup_order_meta', 10, 1);
+function display_pickup_order_meta($order) {
+	$pickup_time = get_post_meta($order->get_id(), 'billing_pickup_time', true);
+	$pickup_option = get_post_meta($order->get_id(), 'billing_pickup_option', true);
+	$ups_point = get_post_meta($order->get_id(), 'billing_ups_pickup_point', true);
+
+	if ($pickup_time) {
+		echo '<p><strong>Pickup Time:</strong> ' . esc_html($pickup_time) . '</p>';
+	}
+	if ($pickup_option) {
+		echo '<p><strong>Pickup Option:</strong> ' . esc_html($pickup_option) . '</p>';
+	}
+	if ($pickup_option == 'deliver_ups_point' && $ups_point) {
+		echo '<p><strong>UPS Pickup Point:</strong> ' . esc_html($ups_point) . '</p>';
+	}
+}
+
+add_action('wp_footer', 'custom_pickup_script');
+function custom_pickup_script() {
+	if (!is_checkout()) return;
+	?>
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$('#billing_ups_pickup_point_field').hide();
+			$('#billing_pickup_option').change(function() {
+				if ($(this).val() == 'deliver_ups_point') {
+					$('#billing_ups_pickup_point_field').show();
+					$('#billing_ups_pickup_point').prop('required', true);
+				} else {
+					$('#billing_ups_pickup_point_field').hide();
+					$('#billing_ups_pickup_point').prop('required', false);
+				}
+			});
+		});
+	</script>
+	<?php
+}
+
+
+
+
